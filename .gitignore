@@ -1,0 +1,9 @@
+
+*.cache
+
+*.db
+
+logs/*
+
+node_modules/*
+vendor/*

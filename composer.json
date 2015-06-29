@@ -1,0 +1,15 @@
+{
+    "require": {
+        "slim/slim": "*",
+        "illuminate/database": "*",
+        "illuminate/validation": "*",
+        "lastcraft/simpletest":"*",
+        "symfony/yaml":"*"
+    },
+    "autoload": {
+    	"psr-4" : {"Phemer\\" : "vendor/../src/Phemer"},
+    	"classmap":[
+                "vendor/../src/Phemer/Models"
+        ]
+    }
+}

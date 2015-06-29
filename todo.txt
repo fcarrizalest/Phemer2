@@ -1,0 +1,48 @@
+
+workspace
+
+
+Nombre.
+
+
+
+
+
+Un usuario tendra por defecto un unico workspace... (Premium mas)
+
+
+
+El dueño del workspaces asigna los permisos y la posibilidad de invitar a otros a unirse 
+
+
+
+Cuantos proyectos tengo con el Cliente  X
+Cuanto tiempo le he invertido al cliente X.
+Cuanto me debe el cliente X
+Cuantas Cotizaciones le enviando
+Cuantas de esas cotizaciones fueron aprobadas.
+
+
+
+Del proyecto X, como va.. cual es el avance. terminare a tiempo?
+Cuantos bugs tiene el proyecto X.
+Cuanto tiempo le he invertido al proyecto Y.
+
+Necesito saber cuanto tiempo le dedicto a las tareas.
+
+
+
+Cada workspace contendra los siguientes parametros.
+
+Clientes. (Asignado a un workspace ) ()
+Facturas. (Asignado a un workspace )
+Proyectos. ( Adjuntar archivos.  Necesito llevar el control de los cambios.  Llevar control del Roadmap. Llevar control de los bugs )
+
+Contactos.
+Notas.
+Comentarios.
+
+Perfiles.... Con los permisos necesarios..
+
+
+

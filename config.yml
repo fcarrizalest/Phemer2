@@ -1,0 +1,16 @@
+environments:
+    default_database: production
+    production:
+        driver: sqlite
+        database: ../db.db
+        charset: utf8
+        collation: utf8_general_ci
+
+    test:
+        driver: sqlite
+        database: :memory:
+        charset: utf8
+        collation: utf8_general_ci
+
+INETROOT: '/~fcarrizalest/10/public'
+LOCALURL_ROOT: 'http://localhost'
