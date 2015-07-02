@@ -16,11 +16,7 @@ $yaml = new Parser();
 
 $config = $yaml->parse(file_get_contents('../config.yml'));
 
-
-
-
 $environments = $config['environments'];
-
 
 $default = $environments['default_database'];
 

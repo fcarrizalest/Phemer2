@@ -13,8 +13,6 @@ $clientController = new \Phemer\Controllers\ClientController();
 $app->get('/',function() use ( $app ) {  
 
 
-   
-
 	$app->render('home.php');
 	
 });
@@ -22,6 +20,8 @@ $app->get('/',function() use ( $app ) {
 
 $app->get('/install', function () use ($app,$capsule ){
 
+
+    $capsule->schema()->dropIfExists('users');
 
 	$capsule->schema()->create('users', function($table)
 {
@@ -31,7 +31,7 @@ $app->get('/install', function () use ($app,$capsule ){
 
 });
 
-
+    $capsule->schema()->dropIfExists('clients');
 	$capsule->schema()->create('clients', function($table)
 {
     $table->increments('id');
@@ -44,8 +44,6 @@ $app->get('/install', function () use ($app,$capsule ){
 
 
 echo 'ok';
-
-
 
 } );
 

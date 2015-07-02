@@ -13,9 +13,12 @@ class ClientController{
 
             $app->get("/", $clientController->Index() );
 
+             $app->get('/:id', $clientController-> GetClientById() );
+
             $app->post('/', $clientController-> PostNewClient() );
 
             $app->put('/:id', $clientController-> PostEditClient() );
+
 
             $app->delete('/:id', $clientController->PostDeleteClient() );
 
@@ -26,11 +29,24 @@ class ClientController{
 
     }
 
+
+    public function GetClientById(){
+        return function($id){
+            $app = \Slim\Slim::getInstance();
+            $app->log->debug("GetClientById clientController");
+
+             $client =  \Client::find($id);
+
+
+             echo $client->toJson();
+        };
+    }
 	public function Index(){
         return function(){
             $app = \Slim\Slim::getInstance();
             
-            $app->log->debug("Algo");
+            $app->log->debug("Index clientController");
+
             
             $array = array();
 
@@ -116,18 +132,22 @@ class ClientController{
 
         return function($id){
             $app = \Slim\Slim::getInstance();
+            $app->log->debug("Entramos A PostEditClient ");
 
-            try {
+            try    {
 
 
-
-                $data['firstname'] = $app->request->post('firstname');
+                $body = $app->request->getBody();
+                 $app->log->debug("Datos Recibidos: <pre>". print_r( $body,true ). "</pre>");
+                $data = json_decode($body,true);
+                
+                //$data['firstname'] = $app->request->post('firstname');
                 $rules['firstname'] = "required";
 
                 
-                $data['lastname'] =  $app->request->post('lastname') ;
+                //$data['lastname'] =  $app->request->post('lastname') ;
                 //$rules['email'] = "required|email";
-                $data['title'] = $app->request->post('title');
+                //$data['title'] = $app->request->post('title');
                 $rules['title'] = "required";
 
 
@@ -149,11 +169,12 @@ class ClientController{
 
                 $model = \Client::findOrFail($id);
                
-                $model->firstname = $app->request->post('firstname');
+                $model->firstname = $data['firstname'];
  
-                $model->lastname = $app->request->post('lastname');
-                $model->title = $app->request->post('title');
+                $model->lastname = $data['lastname'];
+                $model->title = $data['title'];
                
+
                
 
                 $model->save();

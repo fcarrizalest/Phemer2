@@ -16,6 +16,7 @@ define([
             "home"  : "home",
             "newclient" : "newClient",
             "client": "clientList",
+             "client/:id": "viewclient",
             "*actions"  :   "defaultRoute"      //Home (Backbone will try match the route above first)
         }
     });
@@ -40,7 +41,7 @@ define([
 
         
 
-         //Route home
+         //Route Clients
         app_router.on('route:newClient', function(){
 
              if(! usermodel.isLogin() ){
@@ -56,6 +57,26 @@ define([
             
             
         });
+
+
+        app_router.on('route:viewclient', function($id ){
+
+             if(! usermodel.isLogin() ){
+                // no estamos logeados 
+               app_router.navigate("login", {trigger: true, replace: true});
+
+            }else{
+                
+                homeview.viewclient($id);
+
+            }
+
+            
+            
+        });
+
+
+
 
          //Route home
         app_router.on('route:clientList', function(){

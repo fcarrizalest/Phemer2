@@ -8,7 +8,7 @@ environments:
 
     test:
         driver: sqlite
-        database: :memory:
+        database: ../dbTest.db
         charset: utf8
         collation: utf8_general_ci
 

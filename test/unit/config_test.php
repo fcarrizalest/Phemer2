@@ -5,7 +5,7 @@ class TestOfConfig extends UnitTestCase{
 
 		$this->assertTrue( true ) ;
 
-
+		
 
 	}
 

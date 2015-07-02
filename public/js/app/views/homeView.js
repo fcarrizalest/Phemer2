@@ -13,6 +13,7 @@ define([
 	 	initialize:function(){ 
 
          
+            this.clientview = new clientView();
 
            
 
@@ -21,9 +22,9 @@ define([
 	 	render: function(){ 
 
             if( this.dyView){
-
-                this.dyView.remove();
+                //this.dyView.remove();
                 this.dyView = false;
+
                 
 
             }
@@ -57,9 +58,11 @@ define([
             console.log("ejecutamos render");
             
             
-            if(!this.dyView)
-                this.dyView = new clientView( { el: $("#content") });
+            if(!this.dyView){
+                this.dyView =  this.clientview;
+                this.dyView.setElement (  $("#content") );
 
+            }
             this.dyView.app_router = this.app_router;
 
             console.log( this.clientView );
@@ -72,9 +75,17 @@ define([
 
             this.render();
 
+            console.log("Render newClient");
+            console.log(this.dyView);
+            if(!this.dyView){
+                this.dyView =  this.clientview;
+                this.dyView.setElement (  $("#content") );
+                
+            }
+                //this.dyView = new clientView( { el: $("#content") });
 
-            if(!this.dyView)
-                this.dyView = new clientView( { el: $("#content") });
+            console.log("Render dyView");
+            console.log(this.dyView);
 
             this.dyView.newClientFlag = true ;
             this.dyView.app_router = this.app_router;
@@ -82,6 +93,28 @@ define([
             console.log( this.clientView );
 
             this.dyView.render();
+
+        },
+        viewclient: function($id){
+            this.render();
+
+
+            if(!this.dyView){
+                this.dyView =  this.clientview;
+                this.dyView.setElement (  $("#content") );
+                
+            }
+                //this.dyView = new clientView( { el: $("#content") });
+
+            this.dyView.viewClientFlag = true ;
+            this.dyView.id = $id ;
+            this.dyView.app_router = this.app_router;
+            
+            //console.log( this.clientView );
+
+            this.dyView.render();
+
+
 
         },
 	 	events:{
