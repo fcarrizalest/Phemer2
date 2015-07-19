@@ -1,7 +1,7 @@
 <?php
 namespace Phemer\Controllers;
 
-class ClientController{
+class ProyectController{
 
 
     public function routes(){
@@ -9,18 +9,18 @@ class ClientController{
         return function(){
             $app = \Slim\Slim::getInstance();
 
-            $clientController = new \Phemer\Controllers\ClientController();
+            $proyectController = new \Phemer\Controllers\ProyectController();
 
-            $app->get("/", $clientController->Index() );
+            $app->get("/", $proyectController->Index() );
             
-            $app->get('/:id', $clientController-> GetClientById() );
+            $app->get('/:id', $proyectController-> GetProyectById() );
 
-            $app->post('/', $clientController-> PostNewClient() );
+            $app->post('/', $proyectController-> PostNewProyect() );
 
-            $app->put('/:id', $clientController-> PostEditClient() );
+            $app->put('/:id', $proyectController-> PostEditProyect() );
 
 
-            $app->delete('/:id', $clientController->PostDeleteClient() );
+            $app->delete('/:id', $proyectController->PostDeleteProyect() );
 
         };
 
@@ -30,12 +30,12 @@ class ClientController{
     }
 
 
-    public function GetClientById(){
+    public function GetProyectById(){
         return function($id){
             $app = \Slim\Slim::getInstance();
-            $app->log->debug("GetClientById clientController");
+            $app->log->debug("GetProyectById proyectController");
 
-             $client =  \Client::find($id);
+             $client =  \Proyect::find($id);
 
 
              echo $client->toJson();
@@ -45,7 +45,7 @@ class ClientController{
         return function(){
             $app = \Slim\Slim::getInstance();
             
-            $app->log->debug("Index clientController");
+            $app->log->debug("Index proyectController");
 
             
             $array = array();
@@ -57,32 +57,32 @@ class ClientController{
             $columns = $app->request->get('columns');
 
             //if ( is_null( $search) )
-            $clients =  \Client::query();
+            $proyects =  \Proyect::query();
 
             if($search['value'] != ""){
-                $clients->where('title', 'like', '%'.$search['value'].'%');
+                $proyects->where('name', 'like', '%'.$search['value'].'%');
                 //$clients->where('firstname', 'like', '%'.$search['value'].'%');
                 
-                $total =  $clients->get();
+                $total =  $proyects->get();
                 
                
             }
           
-            $clients->orderBy(  $columns [ $order[0]['column'] ]['data'] ,$order[0]['dir']  ) ;
+            $proyects->orderBy(  $columns [ $order[0]['column'] ]['data'] ,$order[0]['dir']  ) ;
             
 
             if($start != 0 )
-                 $clients->skip($start);
+                 $proyects->skip($start);
 
-            $clients->take($length );
+            $proyects->take($length );
 
-            $clients = $clients->get();
+            $proyects = $proyects->get();
 
 
 
             $array['draw'] = $app->request->get('draw');
 
-            $array["recordsTotal"] =  count(  \Client::all() );
+            $array["recordsTotal"] =  count(  \Proyect::all() );
             if($search['value'] != ""){
                 $array["recordsFiltered"] = count(   $total  );
             }else{
@@ -90,31 +90,22 @@ class ClientController{
             }
             
 
-            $array['data'] = $clients->toArray();
-
-
-          
-                
-           
-
-
+            $array['data'] = $proyects->toArray();
             
-             
-
-            
+            $app->log->debug("Datos a enviar: <pre>" .print_r( $array,true). '</pre>' );
             echo json_encode( $array );
 
 
         };
     }
 
-     public function PostDeleteClient(){
+     public function PostDeleteProyect(){
 
         return function($id){
             $app = \Slim\Slim::getInstance();
 
             try {
-                 $model = \Client::findOrFail($id);
+                 $model = \Proyect::findOrFail($id);
                  $model->forceDelete();
 
                 
@@ -132,27 +123,27 @@ class ClientController{
     }
 
 
-    public function PostEditClient(){
+    public function PostEditProyect(){
 
         return function($id){
             $app = \Slim\Slim::getInstance();
-            $app->log->debug("Entramos A PostEditClient ");
+            $app->log->debug("Entramos A PostEditProyect ");
 
-            try    {
+            try{
 
 
                 $body = $app->request->getBody();
-                 $app->log->debug("Datos Recibidos: <pre>". print_r( $body,true ). "</pre>");
+                $app->log->debug("Datos Recibidos: <pre>". print_r( $body,true ). "</pre>");
                 $data = json_decode($body,true);
                 
                 //$data['firstname'] = $app->request->post('firstname');
-                $rules['firstname'] = "required";
+                $rules['name'] = "required";
 
                 
                 //$data['lastname'] =  $app->request->post('lastname') ;
                 //$rules['email'] = "required|email";
                 //$data['title'] = $app->request->post('title');
-                $rules['title'] = "required";
+                //$rules['title'] = "required";
 
 
                 $validator = $app->Validator->make( $data, $rules ) ;
@@ -171,19 +162,19 @@ class ClientController{
                     
                 }
 
-                $model = \Client::findOrFail($id);
+                $model = \Proyect::findOrFail($id);
                
-                $model->firstname = $data['firstname'];
+                $model->name = $data['name'];
  
-                $model->lastname = $data['lastname'];
-                $model->title = $data['title'];
+                $model->description = $data['description'];
+                $model->active = true;
                
 
                
 
                 $model->save();
 
-                
+                $app->log->debug("nuevos datos: <pre>" . print_r( $client->toArray() , true). "</pre>" );
                 echo json_encode( array("success" => true ));
 
                     
@@ -199,23 +190,22 @@ class ClientController{
         };
     }
 
-    public function PostNewClient(){
+    public function PostNewProyect(){
         return function(){
             $app = \Slim\Slim::getInstance();
 
             try {
 
                 $body = $app->request->getBody();
+
+                $app->log->debug("Datos Recibidos: <pre>". print_r( $body,true ). "</pre>");
+               
                 $data = json_decode($body,true);
 
                 //$data['firstname'] = $app->request->post('firstname');
-                $rules['firstname'] = "required";
+                $rules['name'] = "required";
 
                 
-                //$data['lastname'] =  $app->request->post('lastname') ;
-                //$rules['email'] = "required|email";
-                //$data['title'] = $app->request->post('title');
-                $rules['title'] = "required";
 
                 $messages = array(
                     'required' => 'El :attribute es obligatorio.',
@@ -240,20 +230,14 @@ class ClientController{
                 }
 
                 // @TODO Validar los datos de entrada..
-                $array['firstname'] = $data['firstname'];
-                $array['lastname'] = $data['lastname'];
+                $array['name'] = $data['name'];
+                $array['description'] = $data['description'];
 
-                $array['title'] = $data['title'];
-                
+                $array['active'] = true;
+            
+                $proyect = new \Proyect( $array );
 
-
-                $user = new \Client( $array );
-
-                $user->save();
-
-
-               
-
+                $proyect->save();
 
                 
             } catch (\Exception $e) {

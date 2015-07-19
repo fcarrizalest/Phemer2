@@ -1,15 +1,15 @@
 define([
     'underscore',
     'backbone',
-    //'models/generalModel'
+    'app/models/clientModel'
 
-], function(_, Backbone/*, missue*/){
+], function(_, Backbone , clientModel){
 
     //Collection
     var Collection = Backbone.Collection.extend({
 
-        //model: missue,
-
+        model: clientModel,
+        url : function() { return './api/client'; }, 
         //Parse
         parse: function(data) {
             return data.data;

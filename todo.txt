@@ -21,6 +21,7 @@ Cuanto tiempo le he invertido al cliente X.
 Cuanto me debe el cliente X
 Cuantas Cotizaciones le enviando
 Cuantas de esas cotizaciones fueron aprobadas.
+Log de activades... algo como twitter indicando en que se esta trabajando.
 
 
 

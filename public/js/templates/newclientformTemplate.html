@@ -1,9 +1,10 @@
 
-<form id="donewclient" data-abide>
+
+<form id="{{#id}}edit{{/id}}donewclient" data-abide>
 <div class="row">
     <div class=" input-wrapper large-12 columns">
       <label>title
-        <input type="text" required  name="title" id="title" />
+        <input type="text" required  name="title" id="title" value="{{title}}" />
       </label>
     </div>
 </div>
@@ -12,7 +13,7 @@
 <div class="row">
     <div class="input-wrapper large-12 columns">
       <label>firstname
-        <input type="text" required  name="firstname" id="firstname" />
+        <input type="text" required  name="firstname" id="firstname" value="{{firstname}}"  />
       </label>
        <small class="error">Name is required and must be a string.</small>
     </div>
@@ -23,7 +24,7 @@
 <div class="row">
     <div class=" input-wrapper large-12 columns">
       <label>lastname
-        <input type="text" required  name="lastname" id="lastname" />
+        <input type="text" value="{{lastname}}"  required  name="lastname" id="lastname" />
       </label>
        <small class="error">Name is required and must be a string.</small>
     </div>

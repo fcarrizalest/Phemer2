@@ -26,6 +26,7 @@ define([
             console.log("inicializador de clientView ");
             this.newClientFlag = false;
             this.viewClientFlag = false;
+            this.editClientFlag = false;
 
             this.model = new clientModel();
             this.collection = new clientCollection();
@@ -58,9 +59,12 @@ define([
 				//$("#donewclient").on("submit", this.donewclient );		 		
 	 		}else if(this.viewClientFlag){
 
-	 			console.log("Entramos a else if");
+	 			
 	 			this.viewclient();
 
+	 		}else if(this.editClientFlag ){
+
+	 			this.editclient();
 	 		}else{
 	 			
 	 			this.renderIndex();
@@ -68,23 +72,52 @@ define([
 	 		}
 	 		this.newClientFlag = false;
             this.viewClientFlag = false;
+            this.editClientFlag = false;
 
 	 		return this;
 	 		
 	 	},
+	 	editclient:function(){
+	 		if( this.collection.get(this.id) ){
+
+	 			this.model = this.collection.get(this.id);
+
+	 			console.log(this.model);
+	 			//console.log("tenemos");
+	 			$(this.el).html(Mustache.to_html( newclientformTemplate , this.model.toJSON() ));
+
+	 		}else{
+	 			//console.log("notenemos")
+	 			this.model.set("id",this.id);
+	 			var $selft = this;
+
+	 			 this.model.fetch({ success:function(model,response){
+	 			 	
+	 			 	console.log("algo");
+	 			 	$selft.model.set(response);
+
+	 			 	$($selft.el).html(Mustache.to_html( newclientformTemplate , $selft.model.toJSON() ));
+
+	 			 	console.log($selft.model.toJSON());
+	 			 	
+
+	 			 }} );
+	 		}
+
+	 	},
 	 	viewclient:function(){
 
-	 		console.log("back");
+	 		//console.log("back");
 	 		
 	 		if( this.collection.get(this.id) ){
 
 	 			this.model = this.collection.get(this.id);
 
-	 			console.log("tenemos");
+	 			//console.log("tenemos");
 	 			$(this.el).html(Mustache.to_html( clientViewTemplate , this.model.toJSON() ));
 
 	 		}else{
-	 			console.log("notenemos")
+	 			//console.log("notenemos")
 	 			this.model.set("id",this.id);
 	 			var $selft = this;
 
@@ -128,7 +161,28 @@ define([
 
 
 	 	},
+	 	editdonewclient:function(e){
+	 		e.preventDefault();
+	 		console.log("se presiono ");
+	 		console.log(e);
+	 		var $self =this;
+	 		this.model.set({ 
+	 					
+	 					'title': $("#title").val(), 
+	 					'firstname': $("#firstname").val(),
+	 					'lastname': $("#lastname").val()
 
+	 				} );
+
+	 		console.log(this.model);
+	 		this.model.save(null, {success:function(){
+
+	 			$self.editClientFlag = false;
+	 			$self.app_router.navigate("client", {trigger: true, replace: true});
+	 			con
+	 		}});
+
+	 	},
 	 	donewclient: function(e){
 	 		e.preventDefault();
 	 		console.log("se presiono ");
@@ -136,23 +190,59 @@ define([
 	 		var $self =this;
 
 	 		this.model.set({ 
+	 					'id': null,
 	 					'title': $("#title").val(), 
 	 					'firstname': $("#firstname").val(),
 	 					'lastname': $("#lastname").val()
 
 	 				} );
 
-	 		this.model.save();
+	 		this.model.save( null , {success:function(){
+
+	 			$self.newClientFlag = false;
+	 			$self.app_router.navigate("client", {trigger: true, replace: true});
+
+	 		}});
 
 	 		console.log("success")
 	 		$self.newClientFlag = false;
-	 		$self.app_router.navigate("client", {trigger: true, replace: true});
+	 		
 
+	 	},
+	 	deletecliente: function(e){
+	 		e.preventDefault();
+	 		console.log(e);
+
+	 		var $id = $(e.currentTarget).data("id");
+
+	 		console.log($id );
+	 		if( this.collection.get($id ) ){
+	 			var model = this.collection.get($id ) ;
+
+	 			
+	 			model = this.collection.remove($id);
+
+
+	 			console.log("tenemos el modelo");
+
+	 			console.log(model);
+
+	 			var $self = this;
+	 			model.destroy({success: function(model, response) {
+  						
+  						$self.renderIndex();
+
+				}});
+	 			//this.collection.sync();
+
+	 		}
 
 	 	},
 	 	events:{
-        	'submit #donewclient'  : "donewclient"
+        	'submit #donewclient'  : "donewclient",
+        	'submit #editdonewclient'  : "editdonewclient",
 
+        	'click .deleteclient' : "deletecliente"
         },
 
 

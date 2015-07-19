@@ -5,7 +5,7 @@ class Proyect extends \Illuminate\Database\Eloquent\Model
 	public function __construct(array $attributes = array())
 	{
 
-		$fillable = array(  "title", "description", "order"  );
+		$fillable = array(  "name", "description", "active"  );
 		$this->fillable( $fillable);
 		parent::__construct($attributes);
 

@@ -48,7 +48,11 @@ define([
             
 
 	 	},
+        proyectList:function(){
 
+            console.log("Entramos a lista de proyectos ");
+            
+        },
         clientList: function () {
 
             console.log("entramos a client List ");
@@ -94,6 +98,24 @@ define([
 
             this.dyView.render();
 
+        },
+
+        editclient: function($id){
+            this.render();
+            if(!this.dyView){
+                this.dyView =  this.clientview;
+                this.dyView.setElement (  $("#content") );
+                
+            }
+
+            this.dyView.editClientFlag = true ;
+            this.dyView.id = $id ;
+            this.dyView.app_router = this.app_router;
+            
+            //console.log( this.clientView );
+
+            this.dyView.render();
+            
         },
         viewclient: function($id){
             this.render();
