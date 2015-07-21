@@ -8,9 +8,6 @@ $clientController = new \Phemer\Controllers\ClientController();
 $proyectController = new \Phemer\Controllers\ProyectController();
 
 
-//$cache->eraseExpired();
-
-//$cache -> store("algo" ,"algo" );
 $app->get('/',function() use ( $app ) {  
 
 
@@ -57,12 +54,11 @@ $app->get('/install', function () use ($app,$capsule ){
 });
 
 
-echo 'ok';
+
 
 } );
 
 $app->post('/api/dologin', $mainController->doLogin() );
-
 
 $app->group('/api/client', $clientController->routes() );
 

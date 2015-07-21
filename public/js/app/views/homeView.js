@@ -5,8 +5,9 @@ define([
     'mustache',
     'text!templates/homeTemplate.html',
     'app/views/clientView',
+    'app/views/proyectView'
 
-], function($, _, Backbone , Mustache ,  homeTemplate , clientView ){
+], function($, _, Backbone , Mustache ,  homeTemplate , clientView ,proyectView){
 
 	 var HomeView = Backbone.View.extend({ 
 	 	el: $("#page"),
@@ -14,6 +15,7 @@ define([
 
          
             this.clientview = new clientView();
+            this.proyectview = new proyectView();
 
            
 
@@ -48,10 +50,78 @@ define([
             
 
 	 	},
+        newProyect:function(){
+            this.render();
+
+            console.log("Render newProyect");
+            console.log(this.dyView);
+            if(!this.dyView){
+                this.dyView =  this.proyectview;
+                this.dyView.setElement (  $("#content") );
+                
+            }
+                //this.dyView = new clientView( { el: $("#content") });
+
+            console.log("Render dyView");
+            console.log(this.dyView);
+
+            this.dyView.newProyectFlag = true ;
+            this.dyView.app_router = this.app_router;
+            
+            this.dyView.render();
+
+
+        },
+        editproyect: function($id){
+            this.render();
+            if(!this.dyView){
+                this.dyView =  this.proyectview;
+                this.dyView.setElement (  $("#content") );
+                
+            }
+
+            this.dyView.editProyectFlag = true ;
+            this.dyView.id = $id ;
+            this.dyView.app_router = this.app_router;
+            
+            //console.log( this.clientView );
+
+            this.dyView.render();
+            
+        },
+        viewproyect: function($id){
+            this.render();
+
+
+            if(!this.dyView){
+                this.dyView =  this.proyectview;
+                this.dyView.setElement (  $("#content") );
+                
+            }
+                //this.dyView = new clientView( { el: $("#content") });
+
+            this.dyView.viewProyectFlag = true ;
+            this.dyView.id = $id ;
+            this.dyView.app_router = this.app_router;
+            
+            //console.log( this.clientView );
+
+            this.dyView.render();
+
+
+
+        },
         proyectList:function(){
 
             console.log("Entramos a lista de proyectos ");
-            
+            this.render();
+            if(!this.dyView){
+                this.dyView =  this.proyectview;
+                this.dyView.setElement (  $("#content") );
+
+            }
+            this.dyView.app_router = this.app_router;
+            this.dyView.render();
         },
         clientList: function () {
 

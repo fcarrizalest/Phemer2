@@ -19,6 +19,10 @@ define([
             "client/:id/edit": "editclient",
             "client/:id": "viewclient",
             "proyect": "proyectList",
+            "proyect/:id/edit": "editproyect",
+            "proyect/:id": "viewproyect",
+            "newproyect" : "newProyect",
+
             "*actions"  :   "defaultRoute"      //Home (Backbone will try match the route above first)
         }
     });
@@ -42,6 +46,22 @@ define([
 
 
           //Route Proyect
+
+          app_router.on('route:newProyect', function(){
+
+             if(! usermodel.isLogin() ){
+                // no estamos logeados 
+               app_router.navigate("login", {trigger: true, replace: true});
+
+            }else{
+                
+                homeview.newProyect();
+
+            }
+
+            
+            
+        });
         app_router.on('route:proyectList', function(){
 
              if(! usermodel.isLogin() ){
@@ -51,6 +71,40 @@ define([
             }else{
                 
                 homeview.proyectList();
+
+            }
+
+            
+            
+        });
+
+         app_router.on('route:editproyect', function($id ){
+
+             if(! usermodel.isLogin() ){
+                // no estamos logeados 
+               app_router.navigate("login", {trigger: true, replace: true});
+
+            }else{
+                
+                console.log("entreamos a editproyect");
+
+                homeview.editproyect($id);
+
+            }
+
+            
+            
+        });
+
+        app_router.on('route:viewproyect', function($id ){
+
+             if(! usermodel.isLogin() ){
+                // no estamos logeados 
+               app_router.navigate("login", {trigger: true, replace: true});
+
+            }else{
+                
+                homeview.viewproyect($id);
 
             }
 

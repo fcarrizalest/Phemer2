@@ -3,35 +3,35 @@ define([
     'underscore',
     'backbone',
     'mustache',
-    'text!templates/clientTemplate.html',
+    'text!templates/proyectTemplate.html',
     'datatables2',
-    'text!templates/newclientformTemplate.html',
+    'text!templates/newproyectformTemplate.html',
     'app/models/clientModel',
-    'text!templates/abcClientButtonBarTemplate.html',
+    'text!templates/abcProyectButtonBarTemplate.html',
     'app/collections/clientCollection',
-    'text!templates/clientViewTemplate.html',
+    'text!templates/proyectViewTemplate.html',
     
-     
+], function($, _, Backbone , Mustache ,  homeTemplate  , datatables ,newproyectformTemplate,clientModel,abcClientButtonBarTemplate,clientCollection,proyectViewTemplate){
 
-], function($, _, Backbone , Mustache ,  homeTemplate  , datatables , newclientformTemplate , clientModel, abcClientButtonBarTemplate,clientCollection ,clientViewTemplate ){
+	var View = Backbone.View.extend({ 
 
-
-
-	 var ClientView = Backbone.View.extend({ 
-
-	 	el: $("#content"),
-
-	 	initialize:function(){ 
+		el: $("#content"),
+		initialize:function(){ 
             
-            console.log("inicializador de clientView ");
-            this.newClientFlag = false;
-            this.viewClientFlag = false;
-            this.editClientFlag = false;
+            console.log("inicializador de proyectView ");
+            this.newProyectFlag = false;
+            this.viewProyectFlag = false;
+            this.editProyectFlag = false;
 
             this.model = new clientModel();
             this.collection = new clientCollection();
 
 
+
+
+            this.model.urlRoot = './api/proyect';
+            //this.collection.url = function() { return './api/proyect' } ;
+             
 
         },
         renderActionsButtons:function(row, data, dataIndex){
@@ -41,51 +41,51 @@ define([
         	console.log(data);
         	console.log(dataIndex);
         	
-        	$('td:eq(4)', row).html( Mustache.to_html( abcClientButtonBarTemplate , data ) );
+        	$('td:eq(2)', row).html( Mustache.to_html( abcClientButtonBarTemplate , data ) );
         	this.collection.add(data, {merge: true}); 
 
 
         	
 
         },
-	 	render: function(){ 
+        render: function(){ 
 
 
 	 		
-	 		if( this.newClientFlag ){ 
-		 		$(this.el).html(Mustache.to_html( newclientformTemplate ));
+	 		if( this.newProyectFlag ){ 
+		 		$(this.el).html(Mustache.to_html( newproyectformTemplate ));
 				
 				
 
-				//$("#donewclient").on("submit", this.donewclient );		 		
-	 		}else if(this.viewClientFlag){
+				//$("#donewProyect").on("submit", this.donewProyect );		 		
+	 		}else if(this.viewProyectFlag){
 
 	 			
-	 			this.viewclient();
+	 			this.viewProyect();
 
-	 		}else if(this.editClientFlag ){
+	 		}else if(this.editProyectFlag ){
 
-	 			this.editclient();
+	 			this.editProyect();
 	 		}else{
 	 			
 	 			this.renderIndex();
 
 	 		}
-	 		this.newClientFlag = false;
-            this.viewClientFlag = false;
-            this.editClientFlag = false;
+	 		this.newProyectFlag = false;
+            this.viewProyectFlag = false;
+            this.editProyectFlag = false;
 
 	 		return this;
 	 		
 	 	},
-	 	editclient:function(){
+	 	editProyect:function(){
 	 		if( this.collection.get(this.id) ){
 
 	 			this.model = this.collection.get(this.id);
 
 	 			console.log(this.model);
 	 			//console.log("tenemos");
-	 			$(this.el).html(Mustache.to_html( newclientformTemplate , this.model.toJSON() ));
+	 			$(this.el).html(Mustache.to_html( newproyectformTemplate , this.model.toJSON() ));
 
 	 		}else{
 	 			//console.log("notenemos")
@@ -97,7 +97,7 @@ define([
 	 			 	console.log("algo");
 	 			 	$selft.model.set(response);
 
-	 			 	$($selft.el).html(Mustache.to_html( newclientformTemplate , $selft.model.toJSON() ));
+	 			 	$($selft.el).html(Mustache.to_html( newproyectformTemplate , $selft.model.toJSON() ));
 
 	 			 	console.log($selft.model.toJSON());
 	 			 	
@@ -106,7 +106,7 @@ define([
 	 		}
 
 	 	},
-	 	viewclient:function(){
+	 	viewProyect:function(){
 
 	 		//console.log("back");
 	 		
@@ -115,17 +115,17 @@ define([
 	 			this.model = this.collection.get(this.id);
 
 	 			//console.log("tenemos");
-	 			$(this.el).html(Mustache.to_html( clientViewTemplate , this.model.toJSON() ));
+	 			$(this.el).html(Mustache.to_html( proyectViewTemplate , this.model.toJSON() ));
 
 	 		}else{
-	 			//console.log("notenemos")
+	 			console.log("notenemos")
 	 			this.model.set("id",this.id);
 	 			var $selft = this;
 
 	 			 this.model.fetch({ success:function(model,response){
 	 			 	
 	 			 	$selft.model.set(response);
-	 			 	$($selft.el).html(Mustache.to_html( clientViewTemplate , $selft.model.toJSON() ));
+	 			 	$($selft.el).html(Mustache.to_html( proyectViewTemplate , $selft.model.toJSON() ));
 
 
 	 			 }} );
@@ -138,22 +138,20 @@ define([
 
 	 		$(this.el).html(Mustache.to_html( homeTemplate ));
 
-		 		console.log(datatables);
+		 	
 		 	var table = $('#example').dataTable({
 		 		 	"processing": true,
 		 		 	
 		 		 	"serverSide": true,
 		 		 	 "columns": [
             			{ "data": "id" },
-            			{ "data": "title" },
-            			{ "data": "firstname" },
-            			{ "data": "lastname" },
+            			{ "data": "name" },
             			{ "data": "id"  }
 
             
         			],
 	    			"ajax": {
-	        				"url": './api/client',
+	        				"url": './api/proyect',
 	        				"type": 'GET'
 	    			},
 	    			"rowCallback": this.renderActionsButtons,
@@ -164,29 +162,7 @@ define([
 
 
 	 	},
-	 	editdonewclient:function(e){
-	 		e.preventDefault();
-	 		console.log("se presiono ");
-	 		console.log(e);
-	 		var $self =this;
-	 		this.model.set({ 
-	 					
-	 					'title': $("#title").val(), 
-	 					'firstname': $("#firstname").val(),
-	 					'lastname': $("#lastname").val()
-
-	 				} );
-
-	 		console.log(this.model);
-	 		this.model.save(null, {success:function(){
-
-	 			$self.editClientFlag = false;
-	 			$self.app_router.navigate("client", {trigger: true, replace: true});
-	 			con
-	 		}});
-
-	 	},
-	 	donewclient: function(e){
+	 	donewproyect: function(e){
 	 		e.preventDefault();
 	 		console.log("se presiono ");
 	 		console.log(e);
@@ -194,16 +170,16 @@ define([
 
 	 		this.model.set({ 
 	 					'id': null,
-	 					'title': $("#title").val(), 
-	 					'firstname': $("#firstname").val(),
-	 					'lastname': $("#lastname").val()
+	 					'name': $("#name").val(), 
+	 					'description': $("#description").val()
+	 					
 
 	 				} );
 
 	 		this.model.save( null , {success:function(){
 
 	 			$self.newClientFlag = false;
-	 			$self.app_router.navigate("client", {trigger: true, replace: true});
+	 			$self.app_router.navigate("proyect", {trigger: true, replace: true});
 
 	 		}});
 
@@ -212,7 +188,31 @@ define([
 	 		
 
 	 	},
-	 	deletecliente: function(e){
+	 	editdonewproyect:function(e){
+
+	 		e.preventDefault();
+	 		console.log("se presiono ");
+	 		console.log(e);
+	 		var $self =this;
+	 		this.model.set({ 
+	 					
+	 					'name': $("#name").val(), 
+	 					'description': $("#description").val(),
+	 					
+
+	 				} );
+
+	 		console.log(this.model);
+	 		this.model.save(null, {success:function(){
+
+	 			$self.editClientFlag = false;
+	 			$self.app_router.navigate("proyect", {trigger: true, replace: true});
+	 			con
+	 		}});
+
+	 	},
+	 	deleteproyecte:function(e){
+
 	 		e.preventDefault();
 	 		console.log(e);
 
@@ -225,7 +225,8 @@ define([
 	 			
 	 			model = this.collection.remove($id);
 
-
+	 			model.urlRoot = './api/proyect';
+            
 	 			console.log("tenemos el modelo");
 
 	 			console.log(model);
@@ -239,18 +240,15 @@ define([
 	 			//this.collection.sync();
 
 	 		}
-
 	 	},
 	 	events:{
-        	'submit #donewclient'  : "donewclient",
-        	'submit #editdonewclient'  : "editdonewclient",
+        	'submit #donewproyect'  : "donewproyect",
+        	'submit #editdonewproyect'  : "editdonewproyect",
 
-        	'click .deleteclient' : "deletecliente"
+        	'click .deleteproyect' : "deleteproyecte"
         },
 
+	});
 
-
-	 } );
-
-	 return ClientView;
-} );
+	return View;
+});

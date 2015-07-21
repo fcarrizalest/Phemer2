@@ -103,7 +103,7 @@ class ProyectController{
 
         return function($id){
             $app = \Slim\Slim::getInstance();
-
+             $app->log->debug( "PostDeleteProyect: " .$id);
             try {
                  $model = \Proyect::findOrFail($id);
                  $model->forceDelete();
@@ -112,6 +112,7 @@ class ProyectController{
 
             } catch (\Exception $e) {
             
+             $app->log->error( $e->getMessage());
 
             }
 
@@ -174,7 +175,7 @@ class ProyectController{
 
                 $model->save();
 
-                $app->log->debug("nuevos datos: <pre>" . print_r( $client->toArray() , true). "</pre>" );
+                $app->log->debug("nuevos datos: <pre>" . print_r( $model->toArray() , true). "</pre>" );
                 echo json_encode( array("success" => true ));
 
                     
